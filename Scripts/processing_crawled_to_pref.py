@@ -184,7 +184,6 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
                 #print line.strip()
                 newfile.write(line)
 
-
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_tag_und_pref_stw.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
@@ -219,3 +218,32 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
                             i = value
                             #print i + ' '
                     newfile.write(i + ' ')
+
+
+# 8. Replace whatever is written for German Umlaute with the correct letter
+replacements_uml = {
+                    '\\xe4': 'ä',
+                    '\\xfc': 'ü',
+                    '\\xf6': 'ö',
+                    '\\xdf': 'ß'
+                    }
+
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
+    for filename in fnmatch.filter(files, '*_pref_ersetzt.xml'):
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/fulltext/'+filename[:-16]+'fulltext.xml', 'w') as newfile:
+            #print filename
+            for line in openfile:
+                for src, target in replacements_uml.iteritems():
+                    line = line.replace(src, target)
+                #print line.strip()
+                newfile.write(line)
+
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
+    for filename in fnmatch.filter(files, '*_nur_pref_clean_stw.xml'):
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/prefLabel/'+filename[:-22]+'preflabel.xml', 'w') as newfile:
+            #print filename
+            for line in openfile:
+                for src, target in replacements_uml.iteritems():
+                    line = line.replace(src, target)
+                #print line.strip()
+                newfile.write(line)
