@@ -10,34 +10,17 @@ Created on Fri Jul 24 15:50:53 2015
 # See documentation in:
 # http://doc.scrapy.org/topics/items.html
 
-#import scrapy
-
-from scrapy.item import Item, Field
-from scrapy.loader.processors import MapCompose, Join, TakeFirst #, Compose
-#from scrapy.utils.markup import remove_tags, remove_tags_with_content
-
-from w3lib.html import replace_escape_chars, remove_tags
-#from w3lib.html import replace_escape_chars, remove_tags_with_content, remove_tags
+from scrapy.item import Item, Field 				# http://doc.scrapy.org/en/1.0/topics/items.html
+from scrapy.loader.processors import MapCompose, Join 	# http://doc.scrapy.org/en/1.0/topics/loaders.html#declaring-input-and-output-processors
+from w3lib.html import replace_escape_chars, remove_tags 	# https://w3lib.readthedocs.org/en/latest/w3lib.html#module-w3lib.html
 
 
 class Items_Main(Item):
 #   Define the fields for your item here like: name = Field()
-#    a_title = Field(
-#        input_processor = MapCompose(lambda v: v.strip(), remove_tags, replace_escape_chars),
-#        output_processor = TakeFirst(),
-#    )
-#    defined = Field(
-#        input_processor = MapCompose(lambda v: v.strip(), remove_tags, replace_escape_chars),
-#        output_processor = Join(),
-#    )
     fragment = Field(
         input_processor = MapCompose(lambda v: v.strip(), remove_tags, replace_escape_chars),
         output_processor = Join(),
     )
-#        fragment = Field(
-#        input_processor = MapCompose(lambda v: v.strip(), remove_tags_with_content(v, which_ones('<script>',)), replace_escape_chars),
-#        output_processor = Join(),
-#    )
 #    links = Field(
 #        input_processor = MapCompose(lambda v: v.strip(), remove_tags, replace_escape_chars),
 #        output_processor = Join(),

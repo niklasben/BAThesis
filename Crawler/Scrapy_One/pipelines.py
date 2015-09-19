@@ -10,11 +10,8 @@ Created on Fri Jul 24 15:50:53 2015
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/topics/item-pipeline.html
 
-#import json
-#import re
-
-from scrapy import signals
-from scrapy.exporters import XmlItemExporter
+from scrapy import signals                      # http://doc.scrapy.org/en/1.0/topics/signals.html
+from scrapy.exporters import XmlItemExporter    # http://doc.scrapy.org/en/1.0/topics/exporters.html#xmlitemexporter
 
 
 class XmlExportPipeline(object):
@@ -31,8 +28,7 @@ class XmlExportPipeline(object):
     def spider_opened(self, spider):
         xml_name = str(spider.allowed_domains)
         xml_name = xml_name[2:-2]
-        file = open('../output/%s_crawled.xml' % xml_name, 'w+b')
-#        file = open('../output/bauer_kirch_crawled.xml', 'w+b')
+        file = open('../../output/%s_crawled.xml' % xml_name, 'w+b')
         self.files[spider] = file
         self.exporter = XmlItemExporter(file, root_element = 'root', item_element = 'item')
         self.exporter.start_exporting()

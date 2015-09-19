@@ -13,13 +13,6 @@ Created on Fri Jul 24 15:50:53 2015
 #     http://doc.scrapy.org/topics/settings.html
 #
 
-#import os
-#import sys
-#
-#from importlib import import_module
-#from os.path import join, abspath, dirname
-
-
 SPIDER_MODULES = ['Scrapy_One.spiders']
 
 ITEM_PIPELINES = {
@@ -43,7 +36,6 @@ CLOSESPIDER_PAGECOUNT = 400
 DOWNLOAD_DELAY = 2
 
 DEPTH_LIMIT = 3
-#DEPTH_LIMIT = 1
 
 IGNORED_EXTENSIONS = [
     # images
