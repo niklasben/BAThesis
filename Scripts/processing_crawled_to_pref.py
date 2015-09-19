@@ -177,7 +177,7 @@ pattern = re.compile('|'.join(replacements_stw.keys()))
 
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_nur_pref_stw.xml'):
-        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/prefLabel/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
             #print filename
             for line in openfile:
                 line = pattern.sub(lambda m: replacements_stw[re.escape(m.group(0))], line)
@@ -196,7 +196,7 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
 # 7. Replace skos:altLabel with skos:prefLabel in the Files
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_stop_test.xml'):
-        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/fulltext/'+filename[:-22]+'pref_ersetzt.xml', 'w') as newfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-22]+'pref_ersetzt.xml', 'w') as newfile:
             #print filename
             #print 'Neue Schleife! '
             for dirpath2, dirs2, files2 in os.walk('../Files_Working_Directory'):
@@ -220,7 +220,7 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
                     newfile.write(i + ' ')
 
 
-# 8. Replace whatever is written for German Umlaute with the correct letter
+# 8. Replace whatever is written for German Umlaute with the correct German Letter
 replacements_uml = {
                     '\\xe4': 'ä',
                     '\\xfc': 'ü',
