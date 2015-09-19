@@ -16,9 +16,9 @@ from rdflib.namespace import Namespace, SKOS    # https://rdflib.readthedocs.org
 
 
 # 1. Removing CSS from the crawled Files
-for dirpath, dirs, files in os.walk('originalfiles'):
+for dirpath, dirs, files in os.walk('../Files_Crawled'):
     for filename in fnmatch.filter(files, '*_crawled.xml_clean.xml'):
-        with open('originalfiles/'+filename, 'r') as originalfile, open('inbetween/'+filename[:-21]+'ohne_css_test.xml', 'w') as testfile, open('inbetween/'+filename[:-21]+'ohne_css_stw.xml', 'w') as stwfile:
+        with open('../Files_Crawled/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-21]+'ohne_css_test.xml', 'w') as testfile, open('../Files_Working_Directory/'+filename[:-21]+'ohne_css_stw.xml', 'w') as stwfile:
             #print filename[:-21]
             for line in originalfile:
                 if line.strip():
@@ -38,9 +38,9 @@ replacements = {
                 '</root>':''
                 }
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_stw.xml'):
-        with open('inbetween/'+filename, 'r') as originalfile, open('inbetween/'+filename[:-7]+'xml_stw.xml', 'w') as stwfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-7]+'xml_stw.xml', 'w') as stwfile:
                 for line in originalfile:
                     for src, target in replacements.iteritems():
                         line = line.replace(src, target)
@@ -55,9 +55,9 @@ with open('stopwords_german.txt', 'r') as stopwords_file:
     for line in stopwords_file:
         stopwords.append(line.strip())
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_test.xml'):
-        with open('inbetween/'+filename, 'r') as originalfile, open('inbetween/'+filename[:-8]+'stop_test.xml', 'w') as testfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-8]+'stop_test.xml', 'w') as testfile:
                 for line in originalfile:
                     line = line.split()
                     for n in line:
@@ -67,9 +67,9 @@ for dirpath, dirs, files in os.walk('inbetween'):
                             testfile.write(n + ' ')
                             #print n
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stw.xml'):
-        with open('inbetween/'+filename, 'r') as originalfile, open('inbetween/'+filename[:-7]+'stop_stw.xml', 'w') as stwfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-7]+'stop_stw.xml', 'w') as stwfile:
             for line in originalfile:
                 line = line.split()
                 for n in line:
@@ -83,15 +83,15 @@ for dirpath, dirs, files in os.walk('inbetween'):
 # 4. Lemmatizing and Tagging German Words
 tagger = ttw.TreeTagger(TAGLANG='de')
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stop_stw.xml'):
-        tagger.tag_file_to('inbetween/'+filename, 'inbetween/'+filename[:-7]+'tagged_stw.xml')
+        tagger.tag_file_to('../Files_Working_Directory/'+filename, '../Files_Working_Directory/'+filename[:-7]+'tagged_stw.xml')
 
 
 replace = re.compile(r'^replaced-email|^replaced-dns|^<repemail|^<repdns')
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stop_tagged_stw.xml'):
-        with open('inbetween/'+filename, 'r') as originalfile, open('inbetween/'+filename[:-4]+'2.xml', 'w') as stwfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-4]+'2.xml', 'w') as stwfile:
             #print filename
             for line in originalfile:
                 line = line.strip()
@@ -123,9 +123,9 @@ q_alt= sparql.prepareQuery('SELECT ?x WHERE { ?s ?alt ?o . ?s ?pref ?x . FILTER 
 pref = SKOS.prefLabel
 alt = SKOS.altLabel
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stop_tagged_stw2.xml'):
-        with open('inbetween/'+filename, 'r') as openfile, open('inbetween/'+filename[:-33]+'nur_pref_stw.xml', 'w') as preffile, open('inbetween/'+filename[:-33]+'tag_und_pref_stw.xml', 'w') as tagfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-33]+'nur_pref_stw.xml', 'w') as preffile, open('../Files_Working_Directory/'+filename[:-33]+'tag_und_pref_stw.xml', 'w') as tagfile:
             #print filename
             for n in openfile:
                 #print n
@@ -175,9 +175,9 @@ replacements_stw = {
 replacements_stw = dict((re.escape(k), v) for k, v in replacements_stw.iteritems())
 pattern = re.compile('|'.join(replacements_stw.keys()))
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_nur_pref_stw.xml'):
-        with open('inbetween/'+filename, 'r') as openfile, open('outputfiles/1/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/prefLabel/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
             #print filename
             for line in openfile:
                 line = pattern.sub(lambda m: replacements_stw[re.escape(m.group(0))], line)
@@ -185,9 +185,9 @@ for dirpath, dirs, files in os.walk('inbetween'):
                 newfile.write(line)
 
 
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_tag_und_pref_stw.xml'):
-        with open('inbetween/'+filename, 'r') as openfile, open('inbetween/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
             #print filename
             for line in openfile:
                 line = pattern.sub(lambda m: replacements_stw[re.escape(m.group(0))], line)
@@ -195,15 +195,15 @@ for dirpath, dirs, files in os.walk('inbetween'):
 
 
 # 7. Replace skos:altLabel with skos:prefLabel in the Files
-for dirpath, dirs, files in os.walk('inbetween'):
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_stop_test.xml'):
-        with open('inbetween/'+filename, 'r') as openfile, open('outputfiles/2/'+filename[:-22]+'pref_ersetzt.xml', 'w') as newfile:
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/fulltext/'+filename[:-22]+'pref_ersetzt.xml', 'w') as newfile:
             #print filename
             #print 'Neue Schleife! '
-            for dirpath2, dirs2, files2 in os.walk('inbetween'):
+            for dirpath2, dirs2, files2 in os.walk('../Files_Working_Directory'):
                 for filename2 in fnmatch.filter(files2, filename[:-22]+'tag_und_pref_clean_stw.xml'):
                     prefLabel = {}
-                    with open('inbetween/'+filename2, 'r') as prefLabelFile:
+                    with open('../Files_Working_Directory/'+filename2, 'r') as prefLabelFile:
                         #print filename2
                         #print prefLabel
                         for line in prefLabelFile:
