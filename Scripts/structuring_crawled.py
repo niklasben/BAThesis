@@ -24,5 +24,3 @@ for dirpath, dirs, files in os.walk('../Crawler/output'):
                 for src, target in replacements.iteritems():
                     line = line.replace(src, target)
                 newfile.write(line)
-            newfile.close()
-            originalfile.close()
