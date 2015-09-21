@@ -34,7 +34,7 @@ with open('labels_counted.tex', 'w') as texfile:
         texfile.write('% Beginn Anhang Liste Label\n')
         texfile.write('%\n')
         texfile.write('\\section{Anzahl prefLabel und altLabel bei gecrawlten Websites}\\label{sec:listelabel}\n')
-        texfile.write('\\begin{longtable}{|m{0.5cm}|m{5cm}|m{2cm}|m{2cm}|m{2cm}|}\n')
+        texfile.write('\\begin{longtable}{|m{0.5cm}|m{6cm}|m{2cm}|m{2cm}|m{2cm}|}\n')
         texfile.write('\t\\caption{Liste prefLabel und altLabel bei gecrawlten Websites}\\label{tbl:label}\\\\%Verweis im Text mittels \\ref{tbl:label}\n')
         texfile.write('\t\\hline\n')
         texfile.write('\t\\textbf{Nr.} & \\textbf{Website} & \\textbf{prefLabel} & \\textbf{altLabel} & \\textbf{Gesamt} \\\\\n')
