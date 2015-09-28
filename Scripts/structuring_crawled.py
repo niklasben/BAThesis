@@ -3,6 +3,9 @@
 Created on Mon Aug 17 21:38:24 2015
 
 @author: Niklas Bendixen
+
+Even though it doesn't work, how does it feel?
+(http://programmingexcuses.com/)
 """
 
 import os       # https://docs.python.org/2/library/os.html

@@ -3,6 +3,9 @@
 Created on Wed Sep 16 21:05:10 2015
 
 @author: Niklas Bendixen
+
+That was literally a one in a million error
+(http://programmingexcuses.com/)
 """
 
 import os                                       # https://docs.python.org/2/library/os.html
@@ -19,7 +22,6 @@ from rdflib.namespace import Namespace, SKOS    # https://rdflib.readthedocs.org
 for dirpath, dirs, files in os.walk('../Files_Crawled'):
     for filename in fnmatch.filter(files, '*_crawled.xml_clean.xml'):
         with open('../Files_Crawled/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-21]+'ohne_css_test.xml', 'w') as testfile, open('../Files_Working_Directory/'+filename[:-21]+'ohne_css_stw.xml', 'w') as stwfile:
-            #print filename[:-21]
             for line in originalfile:
                 if line.strip():
                     line = re.sub(r'[\w]*[:|.|#][\w]*[ ]?{[\w\W]*}', '', line, re.M)
@@ -45,7 +47,6 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
                     for src, target in replacements.iteritems():
                         line = line.replace(src, target)
                     stwfile.write(line)
-                    #print line
 
 
 # 3. Removing German Stopwords from the Files
@@ -65,7 +66,6 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
                             pass
                         else:
                             testfile.write(n + ' ')
-                            #print n
 
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stw.xml'):
@@ -77,7 +77,6 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
                         pass
                     else:
                         stwfile.write(n + ' ')
-                        #print n
 
 
 # 4. Lemmatizing and Tagging German Words
@@ -92,19 +91,15 @@ replace = re.compile(r'^replaced-email|^replaced-dns|^<repemail|^<repdns')
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stop_tagged_stw.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as originalfile, open('../Files_Working_Directory/'+filename[:-4]+'2.xml', 'w') as stwfile:
-            #print filename
             for line in originalfile:
                 line = line.strip()
                 if replace.search(line) is not None:
-                    #print line
                     pass
                 else:
                     line = line.split('\t')
                     if len(line) != 3:
-                        #print len(line)
                         pass
                     else:
-                        #print line[0] + '\t' + line[1] + '\t' + line[2]
                         stwfile.write(line[0] + '\t' + line[1] + '\t' + line[2] + '\n')
 
 
@@ -126,42 +121,21 @@ alt = SKOS.altLabel
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_xml_stop_tagged_stw2.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-33]+'nur_pref_stw.xml', 'w') as preffile, open('../Files_Working_Directory/'+filename[:-33]+'tag_und_pref_stw.xml', 'w') as tagfile:
-            #print filename
             for n in openfile:
-                #print n
-                #print filename + ' TEST ' + '\n'
                 n = n.strip().split('\t')
-                #print len(n)
-                #print n[1]
-                #print n
-                #print filename + ' ' + n[2]
                 if re.match(r'[NN|NE]', n[1]):
-                    #print n[0] + ' ' + n[1]
-                    #testword = n[0]
-                    #print testword
-                    #o = rdflib.Literal(testword, lang='de')
                     o = rdflib.Literal(n[0], lang='de')
 
                     q_pref_res = g.query(q_pref, initBindings={'pref' : pref, 'o' : o})
-                    #print 'Length q_pref_res: '
-                    #print len(q_pref_res)
 
                     if len(q_pref_res) == 1:
                        for row in g.query(q_pref, initBindings={'pref' : pref, 'o' : o}):
-                           #pass
-                            #print n[0]
-                            #print n[0] + '\t' + n[1] + '\t' + str(row)
                             preffile.write(n[0] + '\n')
                             tagfile.write(n[0] + '\t' + n[1] + '\t' + str(row) + '\n')
                     elif len(q_pref_res) == 0:
                         q_alt_res = g.query(q_alt, initBindings={'alt' : alt, 'o' : o, 'pref' : pref})
                         if len(q_alt_res) == 1:
-                            #print 'Length q_alt_res: '
-                            #print len(q_alt_res)
                             for row in g.query(q_alt, initBindings={'alt' : alt, 'o' : o, 'pref' : pref}):
-                                #pass
-                                #print n[0] + '\t' + n[1] + '\t' + str(row)
-                                #print row
                                 preffile.write(str(row) + '\n')
                                 tagfile.write(n[0] + '\t' + n[1] + '\t' + str(row) + '\n')
 
@@ -178,16 +152,13 @@ pattern = re.compile('|'.join(replacements_stw.keys()))
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_nur_pref_stw.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
-            #print filename
             for line in openfile:
                 line = pattern.sub(lambda m: replacements_stw[re.escape(m.group(0))], line)
-                #print line.strip()
                 newfile.write(line)
 
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_tag_und_pref_stw.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-7]+'clean_stw.xml', 'w') as newfile:
-            #print filename
             for line in openfile:
                 line = pattern.sub(lambda m: replacements_stw[re.escape(m.group(0))], line)
                 newfile.write(line)
@@ -197,26 +168,19 @@ for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_ohne_css_stop_test.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-22]+'pref_ersetzt.xml', 'w') as newfile:
-            #print filename
-            #print 'Neue Schleife! '
             for dirpath2, dirs2, files2 in os.walk('../Files_Working_Directory'):
                 for filename2 in fnmatch.filter(files2, filename[:-22]+'tag_und_pref_clean_stw.xml'):
                     prefLabel = {}
                     with open('../Files_Working_Directory/'+filename2, 'r') as prefLabelFile:
-                        #print filename2
-                        #print prefLabel
                         for line in prefLabelFile:
                             line = line.split()
                             prefLabel[line[0]] = line[2]
-                    #print prefLabel
             for line in openfile:
                 line = line.split()
                 for i in line:
                     for key, value in prefLabel.items():
                         if i in key:
-                            #print i
                             i = value
-                            #print i + ' '
                     newfile.write(i + ' ')
 
 
@@ -231,19 +195,25 @@ replacements_uml = {
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_pref_ersetzt.xml'):
         with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/fulltext/'+filename[:-16]+'fulltext.xml', 'w') as newfile:
-            #print filename
             for line in openfile:
                 for src, target in replacements_uml.iteritems():
                     line = line.replace(src, target)
-                #print line.strip()
                 newfile.write(line)
 
 for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
     for filename in fnmatch.filter(files, '*_nur_pref_clean_stw.xml'):
-        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/prefLabel/'+filename[:-22]+'preflabel.xml', 'w') as newfile:
-            #print filename
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Working_Directory/'+filename[:-22]+'_nur_pref_clean_uml_stw.xml', 'w') as newfile:
             for line in openfile:
                 for src, target in replacements_uml.iteritems():
                     line = line.replace(src, target)
-                #print line.strip()
                 newfile.write(line)
+
+# 9. Restructuring the Files with the skos:prefLabel only to make them readable by RapidMiner
+for dirpath, dirs, files in os.walk('../Files_Working_Directory'):
+    for filename in fnmatch.filter(files, '*_nur_pref_clean_uml_stw.xml'):
+        with open('../Files_Working_Directory/'+filename, 'r') as openfile, open('../Files_Machine_Learning/prefLabel/'+filename[:-26]+'preflabel.xml', 'w') as newfile:
+            newfile.write('<?xml version="1.0" encoding="utf-8"?>\n <root>\n')
+            for line in openfile:
+                line = line.strip()
+                newfile.write('<item> ' + line + ' </item>\n')
+            newfile.write('</root>')

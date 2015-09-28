@@ -3,6 +3,9 @@
 Created on Sun Sep 20 17:38:31 2015
 
 @author: Niklas Bendixen
+
+It worked yesterday
+(http://programmingexcuses.com/)
 """
 
 import os                                       # https://docs.python.org/2/library/os.html
